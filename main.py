@@ -7,83 +7,8 @@ Some required Python modules are not installed:
 You can use `pip install -r requirements.txt`
 ''')
 
-# constants
-CELLS = 3
-CELL_SIZE = 80
-FIELD_SIZE = CELL_SIZE * CELLS
-WINDOW_SIZE = (FIELD_SIZE, FIELD_SIZE)
-WINNING_COMBINATIONS = (
-    # horizontal
-    ((0, 0), (0, 1), (0, 2)),
-    ((1, 0), (1, 1), (1, 2)),
-    ((2, 0), (2, 1), (2, 2)),
-    # vertical
-    ((0, 0), (1, 0), (2, 0)),
-    ((0, 1), (1, 1), (2, 1)),
-    ((0, 2), (1, 2), (2, 2)),
-    # diagonal
-    ((0, 0), (1, 1), (2, 2)),
-    ((0, 2), (1, 1), (2, 0)),
-)
-
-
-class Board:
-    def __init__(self, size: int = 3):
-        self.size = size
-        self.cells = [None] * self.size * self.size
-        self._turn = 'X'
-
-    def get(self, x: int, y: int) -> str | None:
-        '''
-        x - column of board
-        y - row of board
-
-        Returns sign in cell ('X' or '0' or None)
-        '''
-        return self.cells[x * self.size + y]
-
-    def set(self, x: int, y: int, value: str) -> None:
-        '''
-        This method used for internal operations.
-        For player turn use `turn` instead.
-
-        x - column of board
-        y - row of board
-        value - sign for cell ('X' or '0' or None)
-        '''
-        if value not in ('X', '0', None):
-            raise ValueError('Acceptable values:', ('X', '0', ''))
-        self.cells[x * self.size + y] = value
-
-    def turn(self, x: int, y: int):
-        '''
-        This method controls players turns.
-
-        x - column of board
-        y - row of board
-
-        Returns next sign for turn.
-        '''
-        print(i, j)
-        if self.get(i, j) not in ('0', 'X'):
-            self.set(i, j, self._turn)
-            self._turn = '0' if self._turn == 'X' else 'X'
-
-    def is_draw(self):
-        return None not in self.cells
-
-    def is_winner(self) -> str | None:
-        for comb in WINNING_COMBINATIONS:
-            signs = set(self.get(*pos) for pos in comb)
-            if None in signs:
-                continue
-            if len(signs) == 1:
-                return signs.pop()
-        return None
-
-    def __iter__(self):
-        yield from self.cells
-
+from constants import *
+from board import Board
 
 def draw_X(surface: pygame.surface.Surface, center: tuple[int, int]) -> None:
     '''
@@ -167,9 +92,10 @@ while running:
 
     if board.is_draw():
         print('Draw!')
-    if (winner := board.is_winner()):
         running = False
+    if (winner := board.is_winner()):
         print(f'{winner} won!')
+        running = False
 
     clock.tick(10)
 
