@@ -12,7 +12,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GITHUB_REPOSITORY: ${{ github.repository }}
   tag: ${{ github.ref_name }}
-  BUILD_APP_NAME: 'APP NAME'
+  BUILD_APP_NAME: 'TicTacToe'
       
 jobs:
   pyinstaller-build:
