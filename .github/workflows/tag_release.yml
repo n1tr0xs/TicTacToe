@@ -36,7 +36,7 @@ jobs:
           path: .
       - name: LS
         run: |
-          ls .
+          ls TicTacToe
       - name: Create release
         run: |
           gh release create "${tag}" \
