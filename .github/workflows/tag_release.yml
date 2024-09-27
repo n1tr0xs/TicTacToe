@@ -45,7 +45,7 @@ jobs:
               --generate-notes
       - name: Archive builded app
         run: |
-          zip -r "${GITHUB_REPOSITORY#*/}.zip" App
+          zip -r "${GITHUB_REPOSITORY#*/}.zip" "${GITHUB_REPOSITORY#*/}"
       - name: Upload asset
         run: |
           gh release upload "${tag}" "${GITHUB_REPOSITORY#*/}.zip" \
