@@ -42,6 +42,15 @@ class Board:
             self.set(x, y, self._turn)
             self._turn = '0' if self._turn == 'X' else 'X'
 
+        print('Current board:')
+        for i in range(self.size):
+            for j in range(self.size - 1):
+
+                print(self.cells[j * self.size + i] or ' ', end='|')
+
+            print(self.cells[(self.size - 1) * self.size + i] or ' ')
+        print('-' * self.size * self.size)
+
     def is_draw(self):
         return None not in self.cells
 
