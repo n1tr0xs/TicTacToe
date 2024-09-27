@@ -17,7 +17,12 @@ class Game:
         Winner_0: int = 3
         Draw: int = 4
 
-    def __init__(self, screen: pygame.surface.Surface = None, board: Board = None, renderer: Renderer = None):
+    def __init__(
+        self,
+        screen: pygame.surface.Surface = None,
+        board: Board = None,
+        renderer: Renderer = None
+    ):
         self.screen = screen or pygame.display.set_mode(WINDOW_SIZE)
         self.board = board or Board()
         self.renderer = renderer or Renderer(screen, "white")
@@ -52,12 +57,14 @@ class Game:
         Returns 1 if Quit event is triggered.
         Returns 2 if game needs restart.
         '''
+        # alias
+        GS = Game.GameState
         while (event := pygame.event.poll()):
             # close button
             if event.type == pygame.QUIT:
                 return 1
             # Escape key
-            if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_ESCAPE):
+            if (event.type == pygame.KEYDOWN) and (envent.key == pygame.K_ESCAPE):
                 return 1
             # is game running ?
             if self.state == Game.GameState.Running:
@@ -66,7 +73,8 @@ class Game:
                     x, y = event.pos
                     i, j = x // CELL_SIZE, y // CELL_SIZE
                     self.board.turn(i, j)
-            if self.state in (Game.GameState.Winner_0, Game.GameState.Winner_X, Game.GameState.Draw):
+
+            if self.state in (GS.Winner_0, GS.Winner_X, GS.Draw):
                 if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_SPACE):
                     return 2
         return 0
