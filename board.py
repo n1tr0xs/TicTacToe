@@ -1,5 +1,6 @@
 from constants import *
 
+
 class Board:
     def __init__(self, size: int = 3):
         self.size = size
@@ -44,7 +45,7 @@ class Board:
     def is_draw(self):
         return None not in self.cells
 
-    def is_winner(self) -> str | None:
+    def get_winner(self) -> str | None:
         for comb in WINNING_COMBINATIONS:
             signs = set(self.get(*pos) for pos in comb)
             if None in signs:

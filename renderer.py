@@ -2,6 +2,7 @@ import pygame
 from constants import *
 from board import Board
 
+
 class Renderer:
     '''
     Object for rendering game.
