@@ -12,6 +12,7 @@ from constants import *
 from renderer import Renderer
 from game import Game
 
+
 def main():
     screen = pygame.display.set_mode(WINDOW_SIZE)
     renderer = Renderer(screen, "white")

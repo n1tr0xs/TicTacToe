@@ -5,6 +5,7 @@ from board import Board
 from renderer import Renderer
 from constants import *
 
+
 class Game:
     '''
     Initialize board, runs TikTakToe mainloop.
