@@ -22,6 +22,7 @@ jobs:
         with:
           python_ver: '3.10'
           spec: 'src/build.spec'
+          requirements: 'requirements.txt'
           upload_exe_with_name: App
           
   release:    
@@ -34,9 +35,6 @@ jobs:
         with:
           name: App
           path: .
-      - name: LS
-        run: |
-          ls TicTacToe
       - name: Create release
         run: |
           gh release create "${tag}" \
