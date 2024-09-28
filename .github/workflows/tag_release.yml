@@ -22,9 +22,8 @@ jobs:
       - uses: sayyid5416/pyinstaller@v1
         with:
           python_ver: '3.10'
-          spec: 'src/main.py'
+          spec: 'src/build.spec'
           requirements: 'requirements.txt'
-          options: --noconsole, --onedir, --contents-directory ".", --name "${{ env.app_name }}"
           upload_exe_with_name: ${{ env.app_name }}
           
   release:    
@@ -37,6 +36,9 @@ jobs:
         with:
           name: ${{ env.app_name }}
           path: .
+      - name: LS
+        run: |
+          ls .
       - name: Archive builded app
         run: |
           zip -r "${GITHUB_REPOSITORY#*/}.zip" "${{ env.app_name }}"
