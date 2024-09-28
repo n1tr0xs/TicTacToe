@@ -12,6 +12,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GITHUB_REPOSITORY: ${{ github.repository }}
   tag: ${{ github.ref_name }}
+  app_name: "TicTacToe"
       
 jobs:
   pyinstaller-build:
@@ -21,9 +22,10 @@ jobs:
       - uses: sayyid5416/pyinstaller@v1
         with:
           python_ver: '3.10'
-          spec: 'build.spec'
+          spec: 'src/main.py'
           requirements: 'requirements.txt'
-          upload_exe_with_name: "App"
+          options: --noconsole, --onedir, --contents-directory ".", --name "${{ env.app_name }}"
+          upload_exe_with_name: ${{ env.app_name }}
           
   release:    
     name: Publish release
@@ -33,11 +35,11 @@ jobs:
       - name: Download builded app
         uses: actions/download-artifact@v4
         with:
-          name: "App"
+          name: ${{ env.app_name }}
           path: .
       - name: Archive builded app
         run: |
-          zip -r "${GITHUB_REPOSITORY#*/}.zip" main
+          zip -r "${GITHUB_REPOSITORY#*/}.zip" "${{ env.app_name }}"
       - name: Create release
         run: |
           gh release create "${tag}" \
