@@ -83,16 +83,17 @@ class Game:
         '''
         Renders the game mainloop.
         '''
+        help_string = "\n\nPress Space to play again."
         self.screen.fill((0, 0, 0))
         match self.state:
             case Game.GameState.Running:
                 self.renderer.draw_board(self.board)
             case Game.GameState.Draw:
-                self.renderer.draw_text("Game is draw.", self.result_font)
+                self.renderer.draw_text("Game is draw." + help_string, self.result_font)
             case Game.GameState.Winner_0:
-                self.renderer.draw_text("Winner:\nO", self.result_font)
+                self.renderer.draw_text("Winner:\nO" + help_string, self.result_font)
             case Game.GameState.Winner_X:
-                self.renderer.draw_text("Winner:\nX", self.result_font)
+                self.renderer.draw_text("Winner:\nX" + help_string, self.result_font)
 
         pygame.display.flip()
 
