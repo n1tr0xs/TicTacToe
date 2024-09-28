@@ -64,7 +64,7 @@ class Game:
             if event.type == pygame.QUIT:
                 return 1
             # Escape key
-            if (event.type == pygame.KEYDOWN) and (envent.key == pygame.K_ESCAPE):
+            if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_ESCAPE):
                 return 1
             # is game running ?
             if self.state == Game.GameState.Running:
