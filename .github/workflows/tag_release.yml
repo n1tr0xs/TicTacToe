@@ -36,9 +36,6 @@ jobs:
         with:
           name: ${{ env.app_name }}
           path: .
-      - name: LS
-        run: |
-          ls .
       - name: Archive builded app
         run: |
           zip -r "${GITHUB_REPOSITORY#*/}.zip" "${{ env.app_name }}"
