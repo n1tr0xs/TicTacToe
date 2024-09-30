@@ -88,5 +88,9 @@ class Menu():
                                 button['binds'][event.button]()
                             except KeyError:
                                 pass
+                # go to previous menu
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        return
                 self.display()
             self.clock.tick(10)
