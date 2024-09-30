@@ -59,9 +59,8 @@ class Game:
                     if (event.type == pygame.MOUSEBUTTONUP) and (event.button == 1):
                         x, y = event.pos
                         i, j = x // CELL_SIZE, y // CELL_SIZE
-                        self.board.turn(i, j)
-                        winner = self.check_win_tie()
-                        if winner:
+                        self.board.turn(i, j)                        
+                        if (winner := self.check_win_tie()):
                             self.score[winner] += 1
                             self.state = Game.State.Finished
                 elif self.state == Game.State.Finished:
