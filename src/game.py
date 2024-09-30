@@ -1,8 +1,9 @@
 from enum import Enum
 import pygame
 
-from board import Board
 from constants import *
+import utils
+from board import Board
 
 
 class Game:
@@ -49,7 +50,7 @@ class Game:
             while (event := pygame.event.poll()):
                 # close button
                 if event.type == pygame.QUIT:
-                    return 1
+                    utils.exit(0)
                 # Escape key
                 if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_ESCAPE):
                     return 1
@@ -59,7 +60,7 @@ class Game:
                     if (event.type == pygame.MOUSEBUTTONUP) and (event.button == 1):
                         x, y = event.pos
                         i, j = x // CELL_SIZE, y // CELL_SIZE
-                        self.board.turn(i, j)                        
+                        self.board.turn(i, j)
                         if (winner := self.check_win_tie()):
                             self.score[winner] += 1
                             self.state = Game.State.Finished
