@@ -12,13 +12,8 @@ from game import Game
 
 
 def main():
-    while True:
-        game = Game()
-        match game.run():
-            case 1:  # exit game
-                return
-            case 2:  # restart board
-                continue
+    game = Game()
+    game.run()
 
 
 if __name__ == '__main__':
