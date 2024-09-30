@@ -83,6 +83,23 @@ class Game:
                     self.play_again()
         return 0
 
+    def check_win_tie(self):
+        '''
+        Returns the state of the game in case of tie or a win
+        Else returns None
+        '''
+        if self.board.is_winner('X'):
+            return Game.State.Winner_X
+        elif self.board.is_winner('O'):
+            return Game.State.Winner_O
+        elif self.board.is_tie():
+            return Game.State.Tie
+        return
+
+    '''
+    Drawing functions
+    '''
+
     def render(self) -> None:
         '''
         Renders the game mainloop.
@@ -107,23 +124,6 @@ class Game:
 
         pygame.display.flip()
 
-    def check_win_tie(self):
-        '''
-        Returns the state of the game in case of tie or a win
-        Else returns None
-        '''
-        if self.board.is_winner('X'):
-            return Game.State.Winner_X
-        elif self.board.is_winner('O'):
-            return Game.State.Winner_O
-        elif self.board.is_tie():
-            return Game.State.Tie
-        return
-
-    '''
-    Drawing functions
-    '''
-
     def draw_board(
         self,
         grid_color: Colorable = "white",
@@ -132,6 +132,10 @@ class Game:
     ) -> None:
         '''
         Draws board
+
+        grid_color - color for grid
+        X_color - color for sign "X"
+        O_color - color for sign "O"
         '''
         # draws vertical lines
         for i in range(1, self.board.size):
@@ -148,26 +152,26 @@ class Game:
         # draws signs on the board
         for i in range(self.board.size):
             for j in range(self.board.size):
-                x = CELL_SIZE * i + CELL_SIZE // 2
-                y = CELL_SIZE * j + CELL_SIZE // 2
                 match self.board.get(i, j):
                     case 'X':
-                        self.draw_X(x, y, X_color)
+                        self.draw_X((i, j), X_color)
                     case 'O':
-                        self.draw_O((x, y), O_color)
+                        self.draw_O((i, j), O_color)
 
     def draw_X(
         self,
-        x: int,
-        y: int,
+        cell: tuple[int, int],
         color: Colorable = "red"
     ) -> None:
         '''
-        Draws X with center in given coordinates.
+        Draws "X".
 
-        x - x coordinate of the center
-        y - y coordinate of the center
+        cell - (column, row) to draw "X"
+        color - color to draw symbol
         '''
+        i, j = cell
+        x = CELL_SIZE * i + CELL_SIZE // 2
+        y = CELL_SIZE * j + CELL_SIZE // 2
         coef = CELL_SIZE // 2 * .8
         pygame.draw.line(
             self.screen, color,
@@ -182,18 +186,22 @@ class Game:
 
     def draw_O(
         self,
-        center: tuple[int, int],
+        cell: tuple[int, int],
         color: Colorable = "green"
     ) -> None:
         '''
-        Draws O in given `center`.
+        Draws "O".
 
-        center  - center coordinates for the symbol
+        cell - (column, row) to draw "O"
+        color - color to draw symbol
         '''
+        i, j = cell
+        x = CELL_SIZE * i + CELL_SIZE // 2
+        y = CELL_SIZE * j + CELL_SIZE // 2
         coef = CELL_SIZE // 2 * .85
         pygame.draw.circle(
             self.screen, color,
-            center, coef, 1
+            (x, y), coef, 1
         )
 
     def draw_text(
