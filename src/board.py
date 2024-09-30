@@ -13,7 +13,7 @@ class Board:
         x - column of board
         y - row of board
 
-        Returns sign in cell ('X' or '0' or None)
+        Returns sign in cell ('X' or 'O' or None)
         '''
         return self.cells[x * self.size + y]
 
@@ -26,8 +26,8 @@ class Board:
         y - row of board
         value - sign for cell ('X' or '0' or None)
         '''
-        if value not in ('X', '0', None):
-            raise ValueError('Acceptable values:', ('X', '0', ''))
+        if value not in ('X', 'O', None):
+            raise ValueError('Acceptable values:', ('X', 'O', ''))
         self.cells[x * self.size + y] = value
 
     def turn(self, x: int, y: int):
@@ -39,9 +39,9 @@ class Board:
 
         Returns next sign for turn.
         '''
-        if self.get(x, y) not in ('0', 'X'):
+        if self.get(x, y) not in ('O', 'X'):
             self.set(x, y, self._turn)
-            self._turn = '0' if self._turn == 'X' else 'X'
+            self._turn = 'O' if self._turn == 'X' else 'X'
 
     def is_draw(self):
         '''

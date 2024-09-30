@@ -1,5 +1,7 @@
 import pygame
 
+Colorable = pygame.Color | str | int | tuple[int, int, int, [int]]
+
 CELLS = 3
 CELL_SIZE = 80
 FIELD_SIZE = CELL_SIZE * CELLS
@@ -17,4 +19,3 @@ WINNING_COMBINATIONS = (
     ((0, 0), (1, 1), (2, 2)),
     ((0, 2), (1, 1), (2, 0)),
 )
-Colorable = pygame.Color | str | int | tuple[int, int, int, [int]]
