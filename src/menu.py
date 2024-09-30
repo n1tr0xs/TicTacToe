@@ -1,5 +1,6 @@
 from typing import Callable
 import pygame
+import utils
 from constants import *
 
 
@@ -13,6 +14,7 @@ class Menu():
         self.clock = pygame.time.Clock()
         self.font = font or pygame.font.SysFont("Times New Roman", 26)
         self.buttons = []
+        self._sel = 0
 
     def add_button(
         self,
@@ -65,6 +67,8 @@ class Menu():
             rect = pygame.Rect((x, y), (width, height))
             button['rect'] = rect
             if rect.collidepoint(pygame.mouse.get_pos()):
+                self._sel = i
+            if self._sel == i:
                 surface = button['output']['mouseover']
             else:
                 surface = button['output']['default']
@@ -92,5 +96,18 @@ class Menu():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         return
+                    # next button
+                    elif event.key == pygame.K_UP:
+                        self._sel = (self._sel - 1 + len(self.buttons)) % len(self.buttons)
+                    # previous button
+                    elif event.key == pygame.K_DOWN:
+                        self._sel = (self._sel + 1) % len(self.buttons)
+                    # press button
+                    elif event.key == pygame.K_RETURN:
+                        try:
+                            self.buttons[self._sel]['binds'][1]()
+                        except KeyError:
+                            pass
+
                 self.display()
             self.clock.tick(10)
