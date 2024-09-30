@@ -70,7 +70,7 @@ class Game:
                     if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_SPACE):
                         self.play_again()
 
-            self.render()
+                self.render()
             self.clock.tick(10)
 
     def check_win_tie(self):
