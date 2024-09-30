@@ -22,13 +22,13 @@ class Game:
         Running: int = 1
         Finished: int = 2
 
-    def __init__(self):
+    def __init__(self, size: tuple[int, int]):
         '''
         Initializing the game.
 
         screen - pygame display to draw the game
         '''
-        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        self.screen = pygame.display.set_mode(size)
         self.clock = pygame.time.Clock()
         self.board = Board()
         self.state = Game.State.Init
