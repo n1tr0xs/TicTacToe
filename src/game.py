@@ -16,13 +16,13 @@ class Game:
         Running - players playing the game.
         Winner_X - "X" player won.
         Winner_O - "O" player won.
-        Draw - game is draw.
+        Tie - game is tie.
         '''
         Init: int = 0
         Running: int = 1
         Winner_X: int = 2
         Winner_O: int = 3
-        Draw: int = 4
+        Tie: int = 4
 
     def __init__(self):
         '''
@@ -35,7 +35,7 @@ class Game:
         self.result_font = pygame.font.SysFont("Times New Roman", 40)
         self.board = Board()
         self.state = Game.State.Init
-        self.wins = {'X': 0, 'O': 0, 'Draw': 0}
+        self.score = {'X': 0, 'O': 0, 'Tie': 0}
 
     def play_again(self):
         self.board = Board()
@@ -48,15 +48,11 @@ class Game:
         self.state = Game.State.Running
         while True:
             match self.handle_events():
-                case 0:
-                    pass
                 case 1:
                     return 1
-                case 2:
-                    return 2
 
             self.render()
-            self.state = self.check_win_draw() or self.state
+            self.state = self.check_win_tie() or self.state
 
             self.clock.tick(10)
 
@@ -66,9 +62,7 @@ class Game:
 
         Returns 0 if game continues as normal.
         Returns 1 if Quit event is triggered.
-        Returns 2 if game needs restart.
         '''
-        GS = Game.State  # alias
         while (event := pygame.event.poll()):
             # close button
             if event.type == pygame.QUIT:
@@ -84,7 +78,7 @@ class Game:
                     i, j = x // CELL_SIZE, y // CELL_SIZE
                     self.board.turn(i, j)
 
-            if self.state in (GS.Winner_O, GS.Winner_X, GS.Draw):
+            if self.check_win_tie():
                 if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_SPACE):
                     self.play_again()
         return 0
@@ -98,9 +92,9 @@ class Game:
         match self.state:
             case Game.State.Running:
                 self.draw_board()
-            case Game.State.Draw:
+            case Game.State.Tie:
                 self.draw_text(
-                    "Game is draw." + help_string,
+                    "Tie" + help_string,
                 )
             case Game.State.Winner_O:
                 self.draw_text(
@@ -113,17 +107,17 @@ class Game:
 
         pygame.display.flip()
 
-    def check_win_draw(self):
+    def check_win_tie(self):
         '''
-        Returns the state of the game in case of a draw or a win
+        Returns the state of the game in case of tie or a win
         Else returns None
         '''
-        if self.board.get_winner() == 'X':
+        if self.board.is_winner('X'):
             return Game.State.Winner_X
-        elif self.board.get_winner() == 'O':
+        elif self.board.is_winner('O'):
             return Game.State.Winner_O
-        elif self.board.is_draw():
-            return Game.State.Draw
+        elif self.board.is_tie():
+            return Game.State.Tie
         return
 
     '''

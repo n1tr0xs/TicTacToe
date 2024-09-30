@@ -43,24 +43,28 @@ class Board:
             self.set(x, y, self._turn)
             self._turn = 'O' if self._turn == 'X' else 'X'
 
-    def is_draw(self):
+    def is_tie(self):
         '''
-        Checks if game is draw.
+        Checks if game is tie.
         '''
         return None not in self.cells
 
-    def get_winner(self) -> str | None:
+    def is_winner(self, sign: str) -> bool:
         '''
-        Returns winner`s sign.
-        If there is no winner - returns None.
+        Returns True if winner have sign.
         '''
-        for comb in WINNING_COMBINATIONS:
-            signs = set(self.get(*pos) for pos in comb)
-            if None in signs:
-                continue
-            if len(signs) == 1:
-                return signs.pop()
-        return None
+        # Three in row
+        for i in range(3):
+            if self.get(i, 0) == self.get(i, 1) == self.get(i, 2) == sign:
+                return True
+            if self.get(0, i) == self.get(1, i) == self.get(2, i) == sign:
+                return True
+        # Diagonals
+        if self.get(0, 0) == self.get(1, 1) == self.get(2, 2) == sign:
+            return True
+        if self.get(2, 0) == self.get(1, 1) == self.get(0, 2) == sign:
+            return True
+        return False
 
     def __iter__(self):
         yield from self.cells
