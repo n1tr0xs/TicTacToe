@@ -30,7 +30,6 @@ class Game:
         '''
         self.screen = pygame.display.set_mode(WINDOW_SIZE)
         self.clock = pygame.time.Clock()
-        self.result_font = pygame.font.SysFont("Times New Roman", 40)
         self.board = Board()
         self.state = Game.State.Init
         self.score = {'X': 0, 'O': 0, 'Tie': 0}
