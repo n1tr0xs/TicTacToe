@@ -18,7 +18,7 @@ def main():
     renderer = Renderer(screen, "white")
 
     while True:
-        game = Game(screen=screen, renderer=renderer)
+        game = Game(screen, renderer)
         match game.run():
             case 1:  # exit game
                 return

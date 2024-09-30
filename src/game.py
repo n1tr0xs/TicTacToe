@@ -8,9 +8,17 @@ from constants import *
 
 class Game:
     '''
-    Initialize board, runs TikTakToe mainloop.
+    Game for 2 players.
     '''
     class GameState(Enum):
+        '''
+        Game states.
+        Init - initialized.
+        Running - players playing the game.
+        Winner_X - "X" player won.
+        Winner_0 - "0" player won.
+        Draw - game is draw.
+        '''
         Init: int = 0
         Running: int = 1
         Winner_X: int = 2
@@ -20,11 +28,18 @@ class Game:
     def __init__(
         self,
         screen: pygame.surface.Surface = None,
-        board: Board = None,
-        renderer: Renderer = None
+        renderer: Renderer = None,
+        board_size: int = 3,
     ):
+        '''
+        Initializing the game.
+
+        screen - pygame display to draw the game
+        rendere - rendere object
+        board_size - size of board for the game
+        '''
         self.screen = screen or pygame.display.set_mode(WINDOW_SIZE)
-        self.board = board or Board()
+        self.board = Board(board_size)
         self.renderer = renderer or Renderer(screen, "white")
         self.clock = pygame.time.Clock()
         self.state = Game.GameState.Init
@@ -57,8 +72,7 @@ class Game:
         Returns 1 if Quit event is triggered.
         Returns 2 if game needs restart.
         '''
-        # alias
-        GS = Game.GameState
+        GS = Game.GameState  # alias
         while (event := pygame.event.poll()):
             # close button
             if event.type == pygame.QUIT:
@@ -89,11 +103,14 @@ class Game:
             case Game.GameState.Running:
                 self.renderer.draw_board(self.board)
             case Game.GameState.Draw:
-                self.renderer.draw_text("Game is draw." + help_string, self.result_font)
+                self.renderer.draw_text(
+                    "Game is draw." + help_string, self.result_font)
             case Game.GameState.Winner_0:
-                self.renderer.draw_text("Winner:\nO" + help_string, self.result_font)
+                self.renderer.draw_text(
+                    "Winner:\nO" + help_string, self.result_font)
             case Game.GameState.Winner_X:
-                self.renderer.draw_text("Winner:\nX" + help_string, self.result_font)
+                self.renderer.draw_text(
+                    "Winner:\nX" + help_string, self.result_font)
 
         pygame.display.flip()
 

@@ -9,6 +9,7 @@ class Board:
 
     def get(self, x: int, y: int) -> str | None:
         '''
+
         x - column of board
         y - row of board
 
@@ -31,7 +32,7 @@ class Board:
 
     def turn(self, x: int, y: int):
         '''
-        This method controls players turns.
+        Controls players turns.
 
         x - column of board
         y - row of board
@@ -43,9 +44,16 @@ class Board:
             self._turn = '0' if self._turn == 'X' else 'X'
 
     def is_draw(self):
+        '''
+        Checks if game is draw.
+        '''
         return None not in self.cells
 
     def get_winner(self) -> str | None:
+        '''
+        Returns winner`s sign.
+        If there is no winner - returns None.
+        '''
         for comb in WINNING_COMBINATIONS:
             signs = set(self.get(*pos) for pos in comb)
             if None in signs:
