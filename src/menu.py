@@ -45,15 +45,6 @@ class Menu():
             'rect': pygame.Rect((0, 0), (0, 0)),
         })
 
-    def remove_button(self, text: str) -> dict:
-        '''
-        Removes button from menu.
-
-        :param text: button text
-        :return: removed button as dict: {'output': pygame.surface.Surface, 'bind': Callable}
-        '''
-        return self.buttons.pop(text)
-
     def display(self):
         '''
         Displays menu.
