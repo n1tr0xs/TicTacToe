@@ -15,9 +15,7 @@ class Game:
         Game states.
         Init - initialized.
         Running - players playing the game.
-        Winner_X - "X" player won.
-        Winner_O - "O" player won.
-        Tie - game is tie.
+        Finished - game finished.
         '''
         Init: int = 0
         Running: int = 1
@@ -27,7 +25,7 @@ class Game:
         '''
         Initializing the game.
 
-        screen - pygame display to draw the game
+        :param screen: pygame display to draw the game
         '''
         self.screen = pygame.display.set_mode(size)
         self.clock = pygame.time.Clock()
@@ -36,6 +34,9 @@ class Game:
         self.score = {'X': 0, 'O': 0, 'Tie': 0}
 
     def play_again(self):
+        '''
+        Resets board and self.state.
+        '''
         self.board = Board()
         self.state = Game.State.Running
 
@@ -43,7 +44,7 @@ class Game:
         '''
         Game mainloop.
 
-        Returns 1 if Quit event is triggered.
+        :return: 1 if game ended.
         '''
         self.state = Game.State.Running
         while True:
@@ -73,10 +74,10 @@ class Game:
 
     def check_win_tie(self):
         '''
-        Returns "X" if "X" won.
-        Returns "O" if "O" won.
-        Returns "Tie" if game is tie.
-        Else returns None.
+        :return: "X" if "X" won.
+        :return: "O" if "O" won.
+        :return: "Tie" if game is tie.
+        :return: None in other cases.
         '''
         if self.board.is_winner('X'):
             return 'X'
@@ -157,15 +158,16 @@ class Game:
         '''
         Creates text surface.
 
-        text - text to draw
-        font - font for text
-        antialias - antialiasing option
-        color - color for text
-        background - background color for text
-        bold - whether the font should be rendered in bold
-        italic - whether the font should be rendered in italic
-        underline - whether the font should be underlined
-        strikethrough - whether the font should be strikethrough
+        :param text: text to draw
+        :param font: font for text
+        :param antialias: antialiasing option
+        :param color: color for text
+        :param background: background color for text
+        :param bold: whether the font should be rendered in bold
+        :param italic: whether the font should be rendered in italic
+        :param underline: whether the font should be underlined
+        :param strikethrough: whether the font should be strikethrough
+        :return: pygame.surface.Surface rendered text
         '''
         font = font or pygame.font.SysFont("Times New Roman", 20)
         font.set_bold(bold)
@@ -183,9 +185,9 @@ class Game:
         '''
         Draws board
 
-        grid_color - color for grid
-        X_color - color for sign "X"
-        O_color - color for sign "O"
+        :param grid_color: color for grid
+        :param X_color: color for sign "X"
+        :param O_color: color for sign "O"
         '''
         # draws vertical lines
         for i in range(1, self.board.size):
@@ -216,8 +218,8 @@ class Game:
         '''
         Draws "X".
 
-        cell - (column, row) to draw "X"
-        color - color to draw symbol
+        :param cell: (column, row) to draw "X"
+        :param color: color to draw symbol
         '''
         i, j = cell
         x = CELL_SIZE * i + CELL_SIZE // 2
@@ -242,8 +244,8 @@ class Game:
         '''
         Draws "O".
 
-        cell - (column, row) to draw "O"
-        color - color to draw symbol
+        :pararm cell: (column, row) to draw "O"
+        :pararm color: color to draw symbol
         '''
         i, j = cell
         x = CELL_SIZE * i + CELL_SIZE // 2

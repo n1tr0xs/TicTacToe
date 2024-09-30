@@ -1,6 +1,3 @@
-from constants import *
-
-
 class Board:
     def __init__(self, size: int = 3):
         self.size = size
@@ -10,10 +7,10 @@ class Board:
     def get(self, x: int, y: int) -> str | None:
         '''
 
-        x - column of board
-        y - row of board
+        :param x: column of board
+        :param y: row of board
 
-        Returns sign in cell ('X' or 'O' or None)
+        :return: sign in cell ('X' or 'O' or None)
         '''
         return self.cells[x * self.size + y]
 
@@ -22,9 +19,9 @@ class Board:
         This method used for internal operations.
         For player turn use `turn` instead.
 
-        x - column of board
-        y - row of board
-        value - sign for cell ('X' or '0' or None)
+        :param x: column of board
+        :param y: row of board
+        :param value: sign for cell ('X' or '0' or None)
         '''
         if value not in ('X', 'O', None):
             raise ValueError('Acceptable values:', ('X', 'O', ''))
@@ -34,24 +31,23 @@ class Board:
         '''
         Controls players turns.
 
-        x - column of board
-        y - row of board
-
-        Returns next sign for turn.
+        :param x: column of board
+        :param y: row of board
         '''
         if self.get(x, y) not in ('O', 'X'):
             self.set(x, y, self._turn)
             self._turn = 'O' if self._turn == 'X' else 'X'
 
-    def is_tie(self):
+    def is_tie(self) -> bool:
         '''
         Checks if game is tie.
+        :return: True if game is tie else False
         '''
         return None not in self.cells
 
     def is_winner(self, sign: str) -> bool:
         '''
-        Returns True if winner have sign.
+        :return: True if winner have sign.
         '''
         # Three in row
         for i in range(3):

@@ -1,4 +1,3 @@
-from collections import defaultdict
 from typing import Callable
 import pygame
 from constants import *
@@ -28,12 +27,12 @@ class Menu():
         '''
         Adds menu button.
 
-        text - button text
-        bind - callback function
-        color - color for button text
-        background - background for button
-        mouseover_color - color for button text on mouseover
-        mouseover_background - background for button on mouseover
+        :param text: button text
+        :param bind: callback function
+        :param color: color for button text
+        :param background: background for button
+        :param mouseover_color: color for button text on mouseover
+        :param mouseover_background: background for button on mouseover
         '''
         self.buttons.append({
             'output': {
@@ -50,9 +49,8 @@ class Menu():
         '''
         Removes button from menu.
 
-        text - button text
-
-        Returns removed button as dict: {'output': pygame.surface.Surface, 'bind': Callable}
+        :param text: button text
+        :return: removed button as dict: {'output': pygame.surface.Surface, 'bind': Callable}
         '''
         return self.buttons.pop(text)
 
@@ -85,6 +83,9 @@ class Menu():
         pygame.display.flip()
 
     def run(self):
+        '''
+        Runs menu mainloop.
+        '''
         while True:
             while (event := pygame.event.poll()):
                 if event.type == pygame.QUIT:
