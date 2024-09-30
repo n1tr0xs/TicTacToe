@@ -64,7 +64,6 @@ class Game:
                         if winner:
                             self.score[winner] += 1
                             self.state = Game.State.Finished
-
                 elif self.state == Game.State.Finished:
                     if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_SPACE):
                         self.play_again()
