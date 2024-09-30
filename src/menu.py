@@ -1,6 +1,7 @@
 from typing import Callable
 import pygame
 import utils
+from button import Button
 from constants import *
 
 
@@ -9,7 +10,7 @@ class Menu():
     Game main menu.
     '''
 
-    def __init__(self, size: tuple[int, int], font: pygame.font.Font = None):
+    def __init__(self, name: str, size: tuple[int, int], font: pygame.font.Font = None):
         self.screen = pygame.display.set_mode(size)
         self.clock = pygame.time.Clock()
         self.font = font or pygame.font.SysFont("Times New Roman", 26)
