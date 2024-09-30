@@ -22,10 +22,19 @@ def run_game():
 def main():
     pygame.init()
 
-    menu = Menu(WINDOW_SIZE)
-    menu.add_button('Start game', run_game)
-    menu.add_button('Exit', utils.exit)
-    menu.run()
+    main_menu = Menu('Main menu:', WINDOW_SIZE)
+    mode_menu = Menu('Modes menu:', WINDOW_SIZE)
+
+    # mode menu
+    mode_menu.add_button('2 players on 1 PC', run_game)
+    # mode_menu.add_button('Play with Bot', lambda: ...)
+    # mode_menu.add_button('2 online players', lambda: ...)
+    mode_menu.add_button('Back', main_menu.run)
+
+    # main menu
+    main_menu.add_button('Select mode', mode_menu.run)
+    main_menu.add_button('Exit', utils.exit)
+    main_menu.run()
 
     pygame.quit()
 
