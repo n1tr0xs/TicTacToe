@@ -30,7 +30,7 @@ class Button:
         self.binds = {
             1: onclick,
         }
-        font = font or pygame.font.SysFont("Times New Roman", 26)
+        self.font = font or pygame.font.SysFont("Times New Roman", 26)
         self.renders = {
             'default': font.render(
                 text, True, color, background
@@ -49,7 +49,7 @@ class Button:
         '''
         return self.rect.collidepoint(pygame.mouse.get_pos())
 
-    def draw(self, surface: pygame.surface.Surface, dest: tuple[int, int]) -> pygame.Rect:
+    def draw(self, surface: pygame.surface.Surface, dest: tuple[int, int]):
         '''
         Draws button.
         Updates self.rect.
@@ -57,9 +57,15 @@ class Button:
         :param dest: left top corner for button
         :return: area of affected pixels
         '''
-        render = self.renders['default']
-        size = render.get_size()
-        self.rect = pygame.Rect(dest, size)
         if self.is_selected():
             render = self.renders['mouseover']
-        return surface.blit(render, dest)
+        else:
+            render = self.renders['default']
+        self.rect = pygame.Rect(dest, render.get_size())
+        surface.blit(render, dest)
+
+    def get_size(self) -> tuple[int, int]:
+        '''
+        :return: size of rendered button
+        '''
+        return self.renders['default'].get_size()
