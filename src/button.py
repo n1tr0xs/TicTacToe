@@ -38,7 +38,7 @@ class Button:
             'mouseover': font.render(
                 text, True, mouseover_color, mouseover_background
             ),
-        }        
+        }
         self.rect = pygame.Rect(0, 0, 0, 0)
 
     def is_selected(self) -> bool:
@@ -47,7 +47,7 @@ class Button:
 
         :return: is button clicked
         '''
-        return self.rect.collidepoint(pygame.mouse.get_pos()):
+        return self.rect.collidepoint(pygame.mouse.get_pos())
 
     def draw(self, surface: pygame.surface.Surface, dest: tuple[int, int]) -> pygame.Rect:
         '''
