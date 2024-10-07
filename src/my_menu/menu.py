@@ -1,4 +1,12 @@
 import pygame
+from .menubar import MenuBar
+from .actions import *
+from ._types import *
+
+__all__ = [
+    'Menu',
+
+]
 
 
 class Menu:
@@ -19,28 +27,32 @@ class Menu:
         title: str,
         width: int,
         height: int,
-
         surface: pygame.surface.Surface = None,
-        title_font: pygame.font.Font = None,
-        widget_font: pygame.font.Font = None,
     ):
         self._surface = surface
-        self._title = title
-        self._title_font = title_font or pygame.font.SysFont(
-            "Times New Roman", 40)
-        self._widget_font = widget_font or pygame.font.SysFont(
-            "Times New Roman", 20)
+        self._menu_bar = MenuBar(title)
+        self.set_title_font()
+        self.set_widget_font()        
         self._width = width
         self._height = height
+        self._clock = pygame.time.Clock()
 
     def run(self, fps_limit: int = 10):
         while True:
             while (event := pygame.event.poll()):
-                self.draw(self._surface)
-            self._clock.Tick(fps_limit)
+                if event.type == pygame.QUIT:
+                    exit()
+
+                self.draw()
+            self._clock.tick(fps_limit)
 
     def draw(self):
-        print(f'Drawing Menu {self._title}')
+        self._surface.fill((0, 0, 0))
+        menu_bar = self._menu_bar.render()
+
+        self._surface.blit(menu_bar, (0, 0))
+
+        pygame.display.flip()
 
     ''' Setters '''
 
@@ -56,6 +68,28 @@ class Menu:
 
     def set_surface(self, surface: pygame.surface.Surface):
         self._surface = surface
+
+    def set_title_font(
+        self,
+        font_name: str = 'Times New Roman',
+        font_size: int = 40,
+        color: Color = 'white',
+        selected_color: Color = None,
+        background: Color = None,
+        selected_background: Color = None,
+    ):
+        self._menu_bar.set_font(font_name, font_size, color, selected_color, background, selected_background)
+
+    def set_widget_font(
+        self,
+        font_name: str = 'Times New Roman',
+        font_size: int = 20,
+        color: Color = 'white',
+        selected_color: Color = None,
+        background: Color = None,
+        selected_background: Color = None,
+    ):
+        self._widget_font = (font_name, font_size, color, selected_color, background, selected_background)
 
     ''' Getters '''
 

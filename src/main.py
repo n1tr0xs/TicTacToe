@@ -10,13 +10,16 @@ You can use `pip install -r requirements.txt` to install all required modules.
 
 from constants import *
 from game import Game
+from my_menu import Menu
 
 
 def main():
     pygame.init()
 
-    game = Game(WINDOW_SIZE)
-    game.run()
+    surface = pygame.display.set_mode(WINDOW_SIZE)
+
+    main_menu = Menu("Main menu", *WINDOW_SIZE, surface)
+    main_menu.run()
 
     pygame.quit()
 
