@@ -2,7 +2,6 @@ from enum import Enum
 import pygame
 
 from constants import *
-import utils
 from board import Board
 
 
@@ -51,7 +50,7 @@ class Game:
             while (event := pygame.event.poll()):
                 # close button
                 if event.type == pygame.QUIT:
-                    utils.exit(0)
+                    exit(0)
                 # Escape key
                 if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_ESCAPE):
                     return 1
