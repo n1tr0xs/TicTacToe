@@ -1,7 +1,16 @@
 class Board:
-    def __init__(self, size: int = 3):
-        self.size = size
-        self.cells = [None] * self.size * self.size
+    '''
+    TicTacToe board object.
+    '''
+
+    def __init__(self, size):
+        '''
+        Initializing board.
+
+        :param size: cells in row / column on the board.
+        '''
+        self._size = size
+        self._cells = [None] * self._size * self._size
         self._turn = 'X'
 
     def get(self, x: int, y: int) -> str | None:
@@ -12,7 +21,7 @@ class Board:
 
         :return: sign in cell ('X' or 'O' or None)
         '''
-        return self.cells[x * self.size + y]
+        return self._cells[x * self._size + y]
 
     def set(self, x: int, y: int, value: str) -> None:
         '''
@@ -25,9 +34,9 @@ class Board:
         '''
         if value not in ('X', 'O', None):
             raise ValueError('Acceptable values:', ('X', 'O', ''))
-        self.cells[x * self.size + y] = value
+        self._cells[x * self._size + y] = value
 
-    def turn(self, x: int, y: int):
+    def turn(self, x: int, y: int) -> None:
         '''
         Controls players turns.
 
@@ -41,12 +50,16 @@ class Board:
     def is_tie(self) -> bool:
         '''
         Checks if game is tie.
+        You have to check the winner first.
+
         :return: True if game is tie else False
         '''
-        return None not in self.cells
+        return None not in self._cells
 
     def is_winner(self, sign: str) -> bool:
         '''
+        Checks if `sign` won the game.
+
         :return: True if winner have sign.
         '''
         # Three in row
@@ -63,4 +76,4 @@ class Board:
         return False
 
     def __iter__(self):
-        yield from self.cells
+        yield from self._cells

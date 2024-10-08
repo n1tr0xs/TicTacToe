@@ -1,6 +1,12 @@
 import pygame
 
-Colorable = pygame.Color | str | int | tuple[int, int, int, [int]]
+Colorable = \
+    pygame.Color | \
+    str | \
+    int | \
+    tuple[int, int, int] | \
+    tuple[int, int, int, int]
+
 
 WINDOW_SIZE = (240, 240)
 WINNING_COMBINATIONS = (
