@@ -1,14 +1,16 @@
-import sys
-from enum import Enum
 import pygame
 
-from constants import *
-from board import Board
+from .constants import *
+from .board import Board
 
 
 class Game:
     '''
-    Game for 2 local players.
+    Basic TicTacToe game class.
+
+    :pararm width: desired width of the game window.
+    :pararm height: desired height of the game window.
+    :param cells: desired cells in one row / column.
     '''
     class State(Enum):
         '''
@@ -23,15 +25,16 @@ class Game:
 
     def __init__(
         self,
-        surface: pygame.surface.Surface = None
-    ):
-        '''
-        Initializing the game.
-
-        :param surface: pygame Surface to draw game. Must be given to `run` if None.
-        '''
+        width: int = 0,
+        height: int = 0,
+        cells: int = 3,
+        fps: int = 10,
+    ) -> None:
         self._cells = 3
-        self._surface = surface
+        self._width = width
+        self._height = height
+        self._fps = fps
+
         self._clock = pygame.time.Clock()
         self._board = Board(self._cells)
         self._state = Game.State.Init
@@ -44,47 +47,11 @@ class Game:
         self._board = Board(self._cells)
         self._state = Game.State.Running
 
-    def run(
-        self,
-        surface: pygame.surface.Surface = None,
-    ) -> None:
+    def run(self) -> None:
         '''
         Game mainloop.
-
-        :param surface: pygame Surface to draw game.
-        :return: 1 if game ended.
         '''
-        if surface:
-            self._surface = surface
-        if self._surface is None:
-            raise ValueError("Surface must be pygame Surface.")
-
-        self._state = Game.State.Running
-        while True:
-            while (event := pygame.event.poll()):
-                # close button
-                if event.type == pygame.QUIT:
-                    sys.exit(0)
-                # Escape key
-                if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_ESCAPE):
-                    return 1
-                # is game running ?
-                if self._state == Game.State.Running:
-                    # left click
-                    if (event.type == pygame.MOUSEBUTTONUP) and (event.button == 1):
-                        x, y = event.pos
-                        cell_dim = self.get_cell_dimension()
-                        i, j = x // cell_dim, y // cell_dim
-                        self._board.turn(i, j)
-                        if (winner := self.check_win_tie()):
-                            self._score[winner] += 1
-                            self._state = Game.State.Finished
-                elif self._state == Game.State.Finished:
-                    if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_SPACE):
-                        self.play_again()
-
-                self.draw()
-            self._clock.tick(10)
+        self._surface = pygame.display.set_mode((self._width, self._height))
 
     def check_win_tie(self) -> str | None:
         '''
@@ -215,13 +182,17 @@ class Game:
             (x, y), radius=radius, width=1
         )
 
-    def draw_gameover(
-        self,
-    ) -> None:
+    def draw_gameover(self) -> None:
         '''
         Draws gameover screen.
         '''
-        # Scores
+        self.draw_score()
+        self.draw_hints()
+    
+    def draw_score(self) -> None:
+        '''
+        Draws score on screen.
+        '''
         scores = []
         scores.append(self.render_text(
             "Score:",
@@ -244,7 +215,10 @@ class Game:
             self._surface.blit(surf, (center_x - width // 2, y))
             y += height
 
-        # Hints
+    def draw_hints(self) -> None:
+        '''
+        Draws hints on screen.
+        '''
         hints = []
         hints.append(self.render_text(
             "Press Space to play again.",
@@ -305,9 +279,7 @@ class Game:
     Util methods
     '''
 
-    def get_cell_dimension(
-        self,
-    ) -> int:
+    def get_cell_dimension(self) -> int:
         '''
         Returns cell dimension.
 

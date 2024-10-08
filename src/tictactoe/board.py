@@ -1,20 +1,18 @@
 class Board:
     '''
     TicTacToe board object.
+
+    :param size: cells in row / column on the board.
     '''
 
-    def __init__(self, size):
-        '''
-        Initializing board.
-
-        :param size: cells in row / column on the board.
-        '''
+    def __init__(self, size: int = 3) -> None:
         self._size = size
         self._cells = [None] * self._size * self._size
         self._turn = 'X'
 
     def get(self, x: int, y: int) -> str | None:
         '''
+        Returns symbol ('X' or 'O' or None) from cell.
 
         :param x: column of board
         :param y: row of board
@@ -23,10 +21,11 @@ class Board:
         '''
         return self._cells[x * self._size + y]
 
-    def set(self, x: int, y: int, value: str) -> None:
+    def _set(self, x: int, y: int, value: str) -> None:
         '''
-        This method used for internal operations.
-        For player turn use `turn` instead.
+        Sets value to cell.
+        .. note:
+            For player turn use `turn`.
 
         :param x: column of board
         :param y: row of board
@@ -44,7 +43,7 @@ class Board:
         :param y: row of board
         '''
         if self.get(x, y) not in ('O', 'X'):
-            self.set(x, y, self._turn)
+            self._set(x, y, self._turn)
             self._turn = 'O' if self._turn == 'X' else 'X'
 
     def is_tie(self) -> bool:
@@ -64,9 +63,9 @@ class Board:
         '''
         # Three in row
         for i in range(3):
-            if self.get(i, 0) == self.get(i, 1) == self.get(i, 2) == sign:
+            if all(self.get(i, j)==sign for j in range(3)):
                 return True
-            if self.get(0, i) == self.get(1, i) == self.get(2, i) == sign:
+            if all(self.get(j, i)==sign for j in range(3)):
                 return True
         # Diagonals
         if self.get(0, 0) == self.get(1, 1) == self.get(2, 2) == sign:
@@ -75,5 +74,5 @@ class Board:
             return True
         return False
 
-    def __iter__(self):
+    def __iter__(self) -> str | None:
         yield from self._cells
