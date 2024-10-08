@@ -41,7 +41,7 @@ class Game:
         '''
         Resets board and self._state.
         '''
-        self._board = Board()
+        self._board = Board(self._cells)
         self._state = Game.State.Running
 
     def run(
