@@ -1,3 +1,4 @@
+import sys
 from enum import Enum
 import pygame
 
@@ -63,7 +64,7 @@ class Game:
             while (event := pygame.event.poll()):
                 # close button
                 if event.type == pygame.QUIT:
-                    exit(0)
+                    sys.exit(0)
                 # Escape key
                 if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_ESCAPE):
                     return 1
