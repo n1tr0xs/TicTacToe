@@ -2,10 +2,7 @@ import pygame
 
 Colorable = pygame.Color | str | int | tuple[int, int, int, [int]]
 
-CELLS = 3
-CELL_SIZE = 80
-FIELD_SIZE = CELL_SIZE * CELLS
-WINDOW_SIZE = (FIELD_SIZE, FIELD_SIZE)
+WINDOW_SIZE = (240, 240)
 WINNING_COMBINATIONS = (
     # horizontal
     ((0, 0), (0, 1), (0, 2)),

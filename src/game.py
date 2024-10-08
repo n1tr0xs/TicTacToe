@@ -20,13 +20,17 @@ class Game:
         Running: int = 1
         Finished: int = 2
 
-    def __init__(self, size: tuple[int, int]):
+    def __init__(
+        self,
+        surface: pygame.surface.Surface = None,
+    ):
         '''
         Initializing the game.
 
-        :param screen: pygame display to draw the game
+        :param surface: surface to draw the game. Must be given do *run* if None.
         '''
-        self.screen = pygame.display.set_mode(size)
+        self._cells = 3
+        self._surface = surface
         self.clock = pygame.time.Clock()
         self.board = Board()
         self.state = Game.State.Init
@@ -39,12 +43,14 @@ class Game:
         self.board = Board()
         self.state = Game.State.Running
 
-    def run(self):
+    def run(self, surface: pygame.surface.Surface):
         '''
         Game mainloop.
 
+        :param surface: surface to draw game.
         :return: 1 if game ended.
         '''
+        self._surface = surface
         self.state = Game.State.Running
         while True:
             while (event := pygame.event.poll()):
@@ -59,7 +65,7 @@ class Game:
                     # left click
                     if (event.type == pygame.MOUSEBUTTONUP) and (event.button == 1):
                         x, y = event.pos
-                        i, j = x // CELL_SIZE, y // CELL_SIZE
+                        i, j = x // self.get_cell_dimension(), y // self.get_cell_dimension()
                         self.board.turn(i, j)
                         if (winner := self.check_win_tie()):
                             self.score[winner] += 1
@@ -68,7 +74,7 @@ class Game:
                     if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_SPACE):
                         self.play_again()
 
-                self.render()
+                self.draw()
             self.clock.tick(10)
 
     def check_win_tie(self):
@@ -90,11 +96,11 @@ class Game:
     Drawing functions
     '''
 
-    def render(self) -> None:
+    def draw(self) -> None:
         '''
         Renders the game mainloop.
         '''
-        self.screen.fill((0, 0, 0))
+        self._surface.fill((0, 0, 0))
         match self.state:
             case Game.State.Running:
                 self.draw_board()
@@ -107,42 +113,48 @@ class Game:
         '''
         Draws gameover screen.
         '''
-        # scores
-        surfaces = []
-        surfaces.append(self.create_text(
+        # Scores
+        scores = []
+        scores.append(self.render_text(
             "Score:",
             font=pygame.font.SysFont("Times New Roman", 30),
         ))
         for key, val in self.score.items():
-            surfaces.append(self.create_text(
+            scores.append(self.render_text(
                 f"{key:<3}: {val:>7}",
                 font=pygame.font.SysFont("Times New Roman", 20)
             ))
         # calculating x, y to place rendered texts
-        screen_width, screen_height = self.screen.get_size()
+        screen_width, screen_height = self._surface.get_size()
         center_x, center_y = screen_width // 2, screen_height // 2
-        max_width = 0
-        total_height = 0
-        for surf in surfaces:
-            width, height = surf.get_size()
-            max_width = max(max_width, width)
-            total_height += height
-
+        total_height = sum(surf.get_height() for surf in scores)
         y = center_y - total_height // 2
-        for surf in surfaces:
+        for surf in scores:
             width, height = surf.get_size()
-            self.screen.blit(surf, (center_x - width // 2, y))
+            self._surface.blit(surf, (center_x - width // 2, y))
             y += height
 
-        # Hint to play again
-        surf = self.create_text(
+        # Hints
+        hints = []
+        hints.append(self.render_text(
             "Press Space to play again.",
             font=pygame.font.SysFont("Times New Roman", 18),
-        )
-        width, height = surf.get_size()
-        self.screen.blit(surf, (center_x - width // 2, screen_height - height))
+        ))
+        hints.append(self.render_text(
+            "Press Esc to go to Menu.",
+            font=pygame.font.SysFont("Times New Roman", 18),
+        ))
+        # calculating x, y to place rendered texts
+        screen_width, screen_height = self._surface.get_size()
+        center_x, center_y = screen_width // 2, screen_height // 2
+        total_height = sum(surf.get_height() for surf in hints)
+        y = self._surface.get_height()
+        for surf in hints[::-1]:
+            width, height = surf.get_size()
+            y -= height
+            self._surface.blit(surf, (center_x - width // 2, y))
 
-    def create_text(
+    def render_text(
         self,
         text: str,
         font: pygame.font.Font = None,
@@ -175,6 +187,11 @@ class Game:
         font.set_strikethrough(strikethrough)
         return font.render(text, antialias, color, background)
 
+    def get_cell_dimension(self):
+        if self._surface is None:
+            return 0
+        return min(self._surface.get_width(), self._surface.get_height()) // self._cells
+
     def draw_board(
         self,
         grid_color: Colorable = "white",
@@ -189,16 +206,18 @@ class Game:
         :param O_color: color for sign "O"
         '''
         # draws vertical lines
+        cell_width = self.get_cell_dimension()
+        cell_height = self.get_cell_dimension()
         for i in range(1, self.board.size):
             pygame.draw.line(
-                self.screen, grid_color,
-                (CELL_SIZE * i, 0), (CELL_SIZE * i, CELL_SIZE * CELLS)
+                self._surface, grid_color,
+                (cell_width * i, 0), (cell_width * i, cell_height * self._cells)
             )
         # draws horizontal lines
         for i in range(1, self.board.size):
             pygame.draw.line(
-                self.screen, grid_color,
-                (0, CELL_SIZE * i), (CELL_SIZE * CELLS, CELL_SIZE * i)
+                self._surface, grid_color,
+                (0, cell_height * i), (cell_width * self._cells, cell_height * i)
             )
         # draws signs on the board
         for i in range(self.board.size):
@@ -221,16 +240,16 @@ class Game:
         :param color: color to draw symbol
         '''
         i, j = cell
-        x = CELL_SIZE * i + CELL_SIZE // 2
-        y = CELL_SIZE * j + CELL_SIZE // 2
-        coef = CELL_SIZE // 2 * .8
+        x = self.get_cell_dimension() * i + self.get_cell_dimension() // 2
+        y = self.get_cell_dimension() * j + self.get_cell_dimension() // 2
+        coef = self.get_cell_dimension() // 2 * .8
         pygame.draw.line(
-            self.screen, color,
+            self._surface, color,
             (x - coef, y - coef),
             (x + coef, y + coef)
         )
         pygame.draw.line(
-            self.screen, color,
+            self._surface, color,
             (x + coef, y - coef),
             (x - coef, y + coef)
         )
@@ -247,10 +266,10 @@ class Game:
         :pararm color: color to draw symbol
         '''
         i, j = cell
-        x = CELL_SIZE * i + CELL_SIZE // 2
-        y = CELL_SIZE * j + CELL_SIZE // 2
-        coef = CELL_SIZE // 2 * .85
+        x = self.get_cell_dimension() * i + self.get_cell_dimension() // 2
+        y = self.get_cell_dimension() * j + self.get_cell_dimension() // 2
+        coef = self.get_cell_dimension() // 2 * .85
         pygame.draw.circle(
-            self.screen, color,
+            self._surface, color,
             (x, y), coef, 1
         )
