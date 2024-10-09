@@ -37,13 +37,13 @@ class Game:
         cells: int = 3,
         fps: int = 10,
     ) -> None:
-        self._cells = 3
+        self._board_size = 3
         self._width = width
         self._height = height
         self._fps = fps
 
         self._clock = pygame.time.Clock()
-        self._board = Board(self._cells)
+        self._board = Board(self._board_size)
         self._state = Game.State.Init
         self._score = {'X': 0, 'O': 0, 'Tie': 0}
 
@@ -51,7 +51,7 @@ class Game:
         '''
         Resets board and self._state.
         '''
-        self._board = Board(self._cells)
+        self._board = Board(self._board_size)
         self._state = Game.State.Running
 
     def run(self) -> None:
@@ -110,8 +110,8 @@ class Game:
         :param O_color: color for sign "O"
         '''
         self.draw_grid(grid_color)
-        for i in range(self._cells):
-            for j in range(self._cells):
+        for i in range(self._board_size):
+            for j in range(self._board_size):
                 match self._board.get(i, j):
                     case 'X':
                         self.draw_X((i, j), X_color)
@@ -129,16 +129,16 @@ class Game:
         '''
         cell_dim = self.get_cell_dimension()
         # draws vertical lines
-        for i in range(1, self._cells):
+        for i in range(1, self._board_size):
             pygame.draw.line(
                 self._surface, color,
-                (cell_dim * i, 0), (cell_dim * i, cell_dim * self._cells)
+                (cell_dim * i, 0), (cell_dim * i, cell_dim * self._board_size)
             )
         # draws horizontal lines
-        for i in range(1, self._cells):
+        for i in range(1, self._board_size):
             pygame.draw.line(
                 self._surface, color,
-                (0, cell_dim * i), (cell_dim * self._cells, cell_dim * i)
+                (0, cell_dim * i), (cell_dim * self._board_size, cell_dim * i)
             )
 
     def draw_X(
@@ -291,4 +291,4 @@ class Game:
 
         :return: integer value that corresponds cell width / height
         '''
-        return min(self._surface.get_width(), self._surface.get_height()) // self._cells
+        return min(self._surface.get_width(), self._surface.get_height()) // self._board_size
