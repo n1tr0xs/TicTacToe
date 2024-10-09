@@ -37,7 +37,9 @@ class GamePlayerBot(Game):
                 # is game running ?
                 if self._state == Game.State.Running:
                     # left click
-                    if (event.type == pygame.MOUSEBUTTONUP) and (event.button == 1) and (self._board.get_turn() == self._player_sign):
+                    if (event.type == pygame.MOUSEBUTTONUP)\
+                            and (event.button == 1)\
+                            and (self._board.get_turn() == self._player_sign):
                         x, y = event.pos
                         cell_dim = self.get_cell_dimension()
                         i, j = x // cell_dim, y // cell_dim

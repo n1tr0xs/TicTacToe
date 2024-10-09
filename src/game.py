@@ -291,4 +291,4 @@ class Game:
 
         :return: integer value that corresponds cell width / height
         '''
-        return min(self._surface.get_width(), self._surface.get_height()) // self._board_size
+        return min(self._surface.get_size()) // self._board_size

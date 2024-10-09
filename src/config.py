@@ -1,7 +1,7 @@
 import pygame_menu
 
 
-MENU_WINDOW_SIZE = (360, 360)
+MENU_WINDOW_SIZE = (240, 360)
 GAME_WINDOW_SIZE = (240, 240)
 CELLS = 3
 FPS = 10
