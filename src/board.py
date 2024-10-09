@@ -6,45 +6,33 @@ class Board:
     '''
 
     def __init__(self, size: int = 3) -> None:
-        self._size = size
-        self._cells = [None] * self._size * self._size
         self._turn = 'X'
+        self._size = size
+        self._cells = [[None] * self._size for _ in range(self._size)]
 
-    def get(self, x: int, y: int) -> str | None:
+    def get(self, i: int, j: int) -> str | None:
         '''
         Returns symbol ('X' or 'O' or None) from cell.
 
-        :param x: column of board
-        :param y: row of board
+        :param i: row of board
+        :param j: column of board
 
         :return: sign in cell ('X' or 'O' or None)
         '''
-        return self._cells[x * self._size + y]
+        return self._cells[i][j]
 
-    def _set(self, x: int, y: int, value: str) -> None:
-        '''
-        Sets value to cell.
-        .. note:
-            For player turn use `turn`.
-
-        :param x: column of board
-        :param y: row of board
-        :param value: sign for cell ('X' or '0' or None)
-        '''
-        if value not in ('X', 'O', None):
-            raise ValueError('Acceptable values:', ('X', 'O', ''))
-        self._cells[x * self._size + y] = value
-
-    def turn(self, x: int, y: int) -> None:
+    def turn(self, i: int, j: int) -> str:
         '''
         Controls players turns.
 
-        :param x: column of board
-        :param y: row of board
+        :param i: column of board
+        :param j: row of board
+        :return: Return next turn sign ('X' or 'O')
         '''
-        if self.get(x, y) not in ('O', 'X'):
-            self._set(x, y, self._turn)
+        if self._cells[i][j] is None:
+            self._cells[i][j] = self._turn
             self._turn = 'O' if self._turn == 'X' else 'X'
+        return self._turn
 
     def is_tie(self) -> bool:
         '''
@@ -53,7 +41,10 @@ class Board:
 
         :return: True if game is tie else False
         '''
-        return None not in self._cells
+        ties = []
+        for row in self._cells:
+            ties.append(None not in row)
+        return all(ties)
 
     def is_winner(self, sign: str) -> bool:
         '''
@@ -74,5 +65,49 @@ class Board:
             return True
         return False
 
+    def get_turn(self) -> str:
+        '''
+        Returns current turn.
+
+        :return: current turn sign ('X' or 'O')
+        '''
+        return self._turn
+
+    def get_size(self) -> int:
+        '''
+        Return board size.
+
+        :return: size (one dimension) of the board.
+        '''
+        return self._size
+
+    def get_row(self, row: int) -> list[str | None]:
+        '''
+        Returns row of the board.
+
+        :param row: row index to return.
+        :return: list of signs ('X' or 'O' or None) in the row.
+        '''
+        return self._cells[row]
+
+    def get_col(self, col: int) -> list[str | None]:
+        '''
+        Returns columns of the board.
+
+        :param col: column index to return.
+        :return: list of signs ('X' or 'O' or None) in the columns.
+        '''
+        return [self._cells[i][col] for i in range(self._size)]
+
+    def __str__(self) -> str:
+        string = ''
+        for i in range(self._size):
+            line = ''
+            for j in range(self._size):
+                line += self._cells[i][j] or '-'
+            string += '|'.join(line) + '\n'
+        return string
+
     def __iter__(self) -> str | None:
-        yield from self._cells
+        for row in self._cells:
+            yield from row
