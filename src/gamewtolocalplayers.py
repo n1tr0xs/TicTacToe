@@ -1,6 +1,6 @@
 import sys
 import pygame
-from .game import Game
+from game import Game
 
 
 class GameTwoLocalPlayers(Game):

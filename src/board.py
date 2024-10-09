@@ -63,9 +63,9 @@ class Board:
         '''
         # Three in row
         for i in range(3):
-            if all(self.get(i, j)==sign for j in range(3)):
+            if all(self.get(i, j) == sign for j in range(3)):
                 return True
-            if all(self.get(j, i)==sign for j in range(3)):
+            if all(self.get(j, i) == sign for j in range(3)):
                 return True
         # Diagonals
         if self.get(0, 0) == self.get(1, 1) == self.get(2, 2) == sign:

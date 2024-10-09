@@ -11,7 +11,7 @@ You can use `pip install -r requirements.txt` to install all required modules.
 ''')
     sys.exit(0)
 
-from menus import MainMenu
+from mainmenu import MainMenu
 import config
 
 

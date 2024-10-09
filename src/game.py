@@ -1,7 +1,14 @@
+from enum import Enum
 import pygame
 
-from .constants import *
-from .board import Board
+from board import Board
+
+Colorable = \
+    pygame.Color | \
+    str | \
+    int | \
+    tuple[int, int, int] | \
+    tuple[int, int, int, int]
 
 
 class Game:
@@ -188,7 +195,7 @@ class Game:
         '''
         self.draw_score()
         self.draw_hints()
-    
+
     def draw_score(self) -> None:
         '''
         Draws score on screen.
@@ -232,8 +239,7 @@ class Game:
         ))
         # calculating coordinates to place rendered hints
         screen_width, screen_height = self._surface.get_size()
-        center_x, center_y = screen_width // 2, screen_height // 2
-        total_height = sum(surf.get_height() for surf in hints)
+        center_x = screen_width // 2
         y = self._surface.get_height()
         for surf in hints[::-1]:
             width, height = surf.get_size()

@@ -1,7 +1,5 @@
 import pygame
 import pygame_menu
-import config
-from tictactoe import GameTwoLocalPlayers
 
 
 class Menu:
@@ -45,30 +43,3 @@ class Menu:
         End-to-end wrapper for menu.add.button
         '''
         return self._menu.add.button(*args, **kwargs)
-
-
-class MainMenu(Menu):
-    def __init__(self, title, width, height, theme):
-        super().__init__(title, width, height, theme)
-        self._menu.add.button('Select mode', self._mode_menu)
-        self._menu.add.button('Exit', pygame_menu.events.EXIT)
-
-    def _mode_menu(self):
-        '''
-        Calls Mode Menu.
-        '''
-        ModeMenu('Mode menu', self._width, self._height, self._theme).run()
-        self.set_mode()
-
-
-class ModeMenu(Menu):
-    def __init__(self, title, width, height, theme):
-        super().__init__(title, width, height, theme)
-        self._menu.add.button('Player vs Player (local)',
-                              self._two_local_players)
-        self._menu.add.button('Back', self._menu.disable)
-
-    def _two_local_players(self):
-        game = GameTwoLocalPlayers(*config.GAME_WINDOW_SIZE, config.FPS)
-        game.run()
-        self._menu.disable()
