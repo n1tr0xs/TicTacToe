@@ -1,7 +1,7 @@
 import config
 from menu import Menu
 from gameplayerplayerlocal import GamePlayerPlayerLocal
-from bot import GamePlayerBot
+from gameplayerbot import GamePlayerBot
 
 
 class ModeMenu(Menu):
@@ -30,7 +30,7 @@ class ModeMenu(Menu):
         Runs SignMenu.
         '''
         SignMenu("Select your sign", self._width, self._height, self._theme).run()
-        self.set_mode()
+        self._menu.disable()
 
 
 class SignMenu(Menu):
@@ -40,12 +40,14 @@ class SignMenu(Menu):
 
     def __init__(self, title, width, height, theme):
         super().__init__(title, width, height, theme)
-        self._menu.add.button('X', self._sign_X)
-        self._menu.add.button('O', self._sign_O)
+        self._menu.add.button('Start with sign X', self._sign_X)
+        self._menu.add.button('Start with sign O', self._sign_O)
         self._menu.add.button('Back', self._menu.disable)
 
     def _sign_X(self) -> None:
         GamePlayerBot(*config.GAME_WINDOW_SIZE, config.FPS, 'X').run()
+        self.set_mode()
 
     def _sign_O(self) -> None:
         GamePlayerBot(*config.GAME_WINDOW_SIZE, config.FPS, 'O').run()
+        self.set_mode()
